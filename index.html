@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FeedMute — Interactive Demo</title>
+    <script type="module" crossorigin src="/feedmute/assets/index-ttuv1u26.js"></script>
+    <link rel="stylesheet" crossorigin href="/feedmute/assets/index-C8BqeGRR.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div>
+          <h1 id="demo-title">FeedMute Interactive Demo</h1>
+          <p id="demo-subtitle" class="subtitle"></p>
+        </div>
+        <div class="topbar-actions">
+          <div class="lang-switch">
+            <button type="button" data-lang="en" class="lang-btn">EN</button>
+            <button type="button" data-lang="uk" class="lang-btn">UA</button>
+          </div>
+          <button type="button" id="btn-reset" class="btn-secondary" data-i18n="demoReset">Reset demo</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel stats-panel">
+          <div class="stat">
+            <span id="stat-visible" class="stat-num">0</span>
+            <span class="stat-label" data-i18n="demoVisible">Visible</span>
+          </div>
+          <div class="stat">
+            <span id="stat-muted" class="stat-num accent">0</span>
+            <span class="stat-label" data-i18n="demoMuted">Muted</span>
+          </div>
+          <div class="stat">
+            <span id="stat-total" class="stat-num">0</span>
+            <span class="stat-label" data-i18n="demoTotal">Total</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 data-i18n="quickFilters">Built-in filters</h2>
+          <label class="check-row">
+            <input type="checkbox" id="toggle-paywalls" />
+            <span data-i18n="mutePaywalls">Mute paywalled sites</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="toggle-clickbait" />
+            <span data-i18n="muteClickbaitSlop">Mute clickbait & AI slop</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="toggle-seen" />
+            <span data-i18n="hideSeen">Hide already seen posts</span>
+          </label>
+          <button type="button" id="btn-mark-seen" class="btn-secondary small" data-i18n="demoMarkSeen">
+            Mark visible as seen
+          </button>
+          <div class="mode-row">
+            <span data-i18n="displayMode">When muted</span>
+            <select id="select-display-mode">
+              <option value="collapse" data-i18n="modeCollapse">Collapse to a bar</option>
+              <option value="hide" data-i18n="modeHide">Hide completely</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 data-i18n="keywords">Muted keywords</h2>
+          <form id="kw-form" class="add-row">
+            <input type="text" id="kw-input" data-i18n-placeholder="keywordPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="kw-tags" class="tags"></div>
+
+          <h2 class="mt" data-i18n="domains">Muted domains</h2>
+          <form id="dom-form" class="add-row">
+            <input type="text" id="dom-input" data-i18n-placeholder="domainPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="dom-tags" class="tags"></div>
+
+          <h2 class="mt" data-i18n="regexRules">Regex rules</h2>
+          <form id="rx-form" class="add-row">
+            <input type="text" id="rx-input" data-i18n-placeholder="regexPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="rx-tags" class="tags"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2 data-i18n="naturalRules">Plain-language rules (LLM)</h2>
+            <label class="check-inline">
+              <input type="checkbox" id="toggle-llm" />
+              <span data-i18n="enableLlm">Enable</span>
+            </label>
+          </div>
+          <textarea id="llm-prompt" rows="2" data-i18n-placeholder="naturalPlaceholder"></textarea>
+          <div class="presets">
+            <button type="button" class="chip" data-preset="ai" data-i18n="presetAi">No AI hype</button>
+            <button type="button" class="chip" data-preset="ads" data-i18n="presetAds">No promo / ads</button>
+            <button type="button" class="chip" data-preset="politics" data-i18n="presetPolitics">No politics</button>
+          </div>
+          <p class="note" data-i18n="demoLlmNote"></p>
+          <label class="check-row">
+            <input type="checkbox" id="toggle-real-llm" />
+            <span data-i18n="demoUseRealLlm">Send to local/API LLM endpoint</span>
+          </label>
+          <div id="real-llm-fields" class="real-llm-fields" hidden>
+            <input type="text" id="llm-base-url" placeholder="http://127.0.0.1:1234/v1" />
+            <input type="text" id="llm-model" placeholder="local-model" />
+            <input type="password" id="llm-api-key" placeholder="API key (optional for local)" />
+            <button type="button" id="btn-run-real-llm" class="btn-secondary small" data-i18n="testConnection">
+              Test connection
+            </button>
+            <span id="real-llm-status" class="note"></span>
+          </div>
+        </section>
+
+        <section class="panel row-actions">
+          <button type="button" id="btn-export" class="btn-secondary" data-i18n="exportJson">Export JSON</button>
+          <button type="button" id="btn-import" class="btn-secondary" data-i18n="importJson">Import JSON</button>
+          <input type="file" id="import-file" accept=".json,application/json" hidden />
+        </section>
+      </aside>
+
+      <section class="feed-col">
+        <div id="site-tabs" class="site-tabs">
+          <button type="button" class="tab active" data-filter="all" data-i18n="demoAllSites">All feeds</button>
+          <button type="button" class="tab" data-filter="hackernews">Hacker News</button>
+          <button type="button" class="tab" data-filter="reddit">Reddit</button>
+          <button type="button" class="tab" data-filter="x">X</button>
+          <button type="button" class="tab" data-filter="ua" data-i18n="demoUaNews">UA News</button>
+        </div>
+
+        <div id="feed-list" class="feed-list"></div>
+      </section>
+    </main>
+
+  </body>
+</html>
