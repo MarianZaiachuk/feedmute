@@ -1,5 +1,5 @@
 import { createDefaultSettings, mergeSettings } from "../src/core/engine.js";
-import { classifyItemsWithLlm, computeRulesHash, testLlmConnection } from "../src/core/llm.js";
+import { classifyItemsWithLlm, computeRulesHash, getLlmOriginPattern, testLlmConnection } from "../src/core/llm.js";
 
 const MAX_CACHE_ENTRIES = 600;
 const tabMutedCounts = new Map();
@@ -49,6 +49,14 @@ async function handleClassifyBatch(items, settingsOverride) {
 
   if (uncached.length === 0) {
     return { verdicts, error: null };
+  }
+
+  const origin = getLlmOriginPattern(settings.llm);
+  if (chrome.permissions?.contains) {
+    const hasPermission = origin ? await chrome.permissions.contains({ origins: [origin] }) : false;
+    if (!hasPermission) {
+      return { verdicts, error: "LLM host permission not granted" };
+    }
   }
 
   let lastError = null;

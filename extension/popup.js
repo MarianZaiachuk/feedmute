@@ -6,6 +6,7 @@ import {
   normalizeDomain,
 } from "../src/core/engine.js";
 import { resolveLanguage, t } from "../src/core/i18n.js";
+import { getLlmOriginPattern, isSupportedLlmOrigin } from "../src/core/llm.js";
 
 let settings = createDefaultSettings();
 let activeAdapter = null;
@@ -218,9 +219,25 @@ async function init() {
     }, 300);
   });
 
+  async function requestLlmPermissionIfNeeded(llmConfig) {
+    const origin = getLlmOriginPattern(llmConfig);
+    if (!isSupportedLlmOrigin(origin)) return false;
+    if (!chrome.permissions?.contains || !chrome.permissions?.request) return true;
+    try {
+      const has = await chrome.permissions.contains({ origins: [origin] });
+      if (has) return true;
+      return await chrome.permissions.request({ origins: [origin] });
+    } catch {
+      return false;
+    }
+  }
+
   el.llmToggle.addEventListener("change", async () => {
     settings.llm.enabled = el.llmToggle.checked;
     await save();
+    if (el.llmToggle.checked) {
+      await requestLlmPermissionIfNeeded(settings.llm);
+    }
   });
 
   document.querySelectorAll(".chip[data-preset]").forEach((chip) => {
@@ -238,6 +255,7 @@ async function init() {
       settings.llm.enabled = true;
       el.llmToggle.checked = true;
       await save();
+      await requestLlmPermissionIfNeeded(settings.llm);
     });
   });
 

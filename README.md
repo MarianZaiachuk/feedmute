@@ -50,6 +50,10 @@ npm run dev
 
 Built static output goes to `dist/demo` (`npm run build:demo`).
 
+## Privacy
+
+FeedMute runs locally with zero telemetry. See [PRIVACY.md](PRIVACY.md) for details on local storage, permissions, and optional LLM requests.
+
 ## License
 
 [MIT](LICENSE)

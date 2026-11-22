@@ -8,6 +8,7 @@ import {
   normalizeDomain,
 } from "../src/core/engine.js";
 import { resolveLanguage, t } from "../src/core/i18n.js";
+import { getLlmOriginPattern, isSupportedLlmOrigin } from "../src/core/llm.js";
 
 let settings = createDefaultSettings();
 
@@ -241,13 +242,47 @@ async function init() {
     await save();
   };
 
-  [el.llmEnabled, el.llmProvider].forEach((node) => node.addEventListener("change", syncLlmFields));
+  async function ensureLlmPermission(llmConfig) {
+    const origin = getLlmOriginPattern(llmConfig);
+    if (!isSupportedLlmOrigin(origin)) {
+      return {
+        granted: false,
+        reason: "Unsupported LLM host (use localhost, 127.0.0.1, OpenAI, OpenRouter, or Gemini)",
+      };
+    }
+    if (!chrome.permissions?.contains || !chrome.permissions?.request) {
+      return { granted: true, reason: "" };
+    }
+    if (await chrome.permissions.contains({ origins: [origin] })) {
+      return { granted: true, reason: "" };
+    }
+    const granted = await chrome.permissions.request({ origins: [origin] });
+    return { granted, reason: granted ? "" : "Host permission denied" };
+  }
+
+  el.llmEnabled.addEventListener("change", async () => {
+    await syncLlmFields();
+    if (el.llmEnabled.checked) {
+      const perm = await ensureLlmPermission(settings.llm);
+      if (!perm.granted) {
+        el.llmTestStatus.textContent = perm.reason;
+        el.llmTestStatus.style.color = "#f87171";
+      }
+    }
+  });
+  el.llmProvider.addEventListener("change", syncLlmFields);
   [el.llmModel, el.llmBaseUrl, el.llmApiKey, el.llmRules].forEach((node) =>
     node.addEventListener("change", syncLlmFields)
   );
 
   el.btnTestLlm.addEventListener("click", async () => {
     await syncLlmFields();
+    const perm = await ensureLlmPermission(settings.llm);
+    if (!perm.granted) {
+      el.llmTestStatus.textContent = perm.reason;
+      el.llmTestStatus.style.color = "#f87171";
+      return;
+    }
     el.llmTestStatus.textContent = "...";
     const res = await chrome.runtime.sendMessage({
       type: "TEST_LLM",

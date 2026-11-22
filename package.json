@@ -1,6 +1,6 @@
 {
   "name": "feedmute",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bilingual (EN/UA) mute button for Hacker News, Reddit, X, Google News, and Ukrainian news feeds.",
   "type": "module",
   "scripts": {

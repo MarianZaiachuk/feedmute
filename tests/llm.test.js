@@ -1,7 +1,42 @@
 import { describe, expect, it } from "vitest";
-import { classifyItemsWithLlm, computeRulesHash, parseLlmBatchResponse } from "../src/core/llm.js";
+import {
+  classifyItemsWithLlm,
+  computeRulesHash,
+  getLlmOriginPattern,
+  isSupportedLlmOrigin,
+  parseLlmBatchResponse,
+} from "../src/core/llm.js";
 
 describe("LLM classification helpers", () => {
+  it("resolves and validates supported LLM origin patterns", () => {
+    expect(getLlmOriginPattern({ provider: "gemini" })).toBe("https://generativelanguage.googleapis.com/*");
+    expect(getLlmOriginPattern({ provider: "openai_compatible", baseUrl: "http://127.0.0.1:1234/v1" })).toBe(
+      "http://127.0.0.1/*"
+    );
+    expect(getLlmOriginPattern({ provider: "openai_compatible", baseUrl: "http://localhost:11434/v1" })).toBe(
+      "http://localhost/*"
+    );
+    expect(getLlmOriginPattern({ provider: "openai_compatible", baseUrl: "https://api.openai.com/v1" })).toBe(
+      "https://api.openai.com/*"
+    );
+    expect(getLlmOriginPattern({ provider: "openai_compatible", baseUrl: "https://openrouter.ai/api/v1" })).toBe(
+      "https://openrouter.ai/*"
+    );
+
+    expect(isSupportedLlmOrigin("https://generativelanguage.googleapis.com/*")).toBe(true);
+    expect(isSupportedLlmOrigin("http://127.0.0.1/*")).toBe(true);
+    expect(isSupportedLlmOrigin("http://localhost/*")).toBe(true);
+    expect(isSupportedLlmOrigin("https://api.openai.com/*")).toBe(true);
+    expect(isSupportedLlmOrigin("https://openrouter.ai/*")).toBe(true);
+
+    const unsupported = getLlmOriginPattern({ provider: "openai_compatible", baseUrl: "https://example.com/v1" });
+    expect(unsupported).toBe("https://example.com/*");
+    expect(isSupportedLlmOrigin(unsupported)).toBe(false);
+
+    expect(getLlmOriginPattern({ provider: "openai_compatible", baseUrl: "not-a-url" })).toBeNull();
+    expect(isSupportedLlmOrigin(null)).toBe(false);
+  });
+
   it("computes deterministic rules hash", () => {
     expect(computeRulesHash("no crypto")).toBe(computeRulesHash("  no crypto  "));
     expect(computeRulesHash("no crypto")).not.toBe(computeRulesHash("no politics"));

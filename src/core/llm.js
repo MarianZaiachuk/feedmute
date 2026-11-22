@@ -1,3 +1,34 @@
+export const ALLOWED_LLM_ORIGINS = [
+  "http://127.0.0.1/*",
+  "http://localhost/*",
+  "https://api.openai.com/*",
+  "https://generativelanguage.googleapis.com/*",
+  "https://openrouter.ai/*",
+];
+
+export function getLlmOriginPattern(llmConfig) {
+  if (llmConfig?.provider === "gemini") {
+    return "https://generativelanguage.googleapis.com/*";
+  }
+  const rawUrl = (llmConfig?.baseUrl || "").trim() || "http://127.0.0.1:1234/v1";
+  try {
+    const parsed = new URL(rawUrl);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return null;
+    }
+    if (!parsed.hostname) {
+      return null;
+    }
+    return `${parsed.protocol}//${parsed.hostname.toLowerCase()}/*`;
+  } catch {
+    return null;
+  }
+}
+
+export function isSupportedLlmOrigin(originPattern) {
+  return Boolean(originPattern && ALLOWED_LLM_ORIGINS.includes(originPattern));
+}
+
 export function computeRulesHash(rulesPrompt) {
   const str = (rulesPrompt || "").trim();
   let hash = 2166136261;
