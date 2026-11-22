@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FeedMute Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="topbar">
+        <div class="brand">
+          <img src="icons/icon-48.png" alt="FeedMute" width="28" height="28" />
+          <div>
+            <h1 data-i18n="optionsTitle">FeedMute Settings</h1>
+            <p data-i18n="tagline"></p>
+          </div>
+        </div>
+        <div class="lang-switch">
+          <button type="button" data-lang="en" class="lang-btn">EN</button>
+          <button type="button" data-lang="uk" class="lang-btn">UA</button>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2 data-i18n="sitesHeading">Supported sites</h2>
+        <div id="sites-grid" class="sites-grid"></div>
+      </section>
+
+      <div class="grid-2">
+        <section class="card">
+          <h2 data-i18n="keywords">Muted keywords</h2>
+          <form id="kw-form" class="add-row">
+            <input type="text" id="kw-input" data-i18n-placeholder="keywordPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="kw-tags" class="tags"></div>
+        </section>
+
+        <section class="card">
+          <h2 data-i18n="domains">Muted domains</h2>
+          <form id="dom-form" class="add-row">
+            <input type="text" id="dom-input" data-i18n-placeholder="domainPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="dom-tags" class="tags"></div>
+        </section>
+      </div>
+
+      <div class="grid-2">
+        <section class="card">
+          <h2 data-i18n="paywallsHeading">Custom paywall domains</h2>
+          <form id="pw-form" class="add-row">
+            <input type="text" id="pw-input" data-i18n-placeholder="domainPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="pw-tags" class="tags"></div>
+        </section>
+
+        <section class="card">
+          <h2 data-i18n="regexRules">Regex rules</h2>
+          <form id="rx-form" class="add-row">
+            <input type="text" id="rx-input" data-i18n-placeholder="regexPlaceholder" />
+            <button type="submit" data-i18n="add">Add</button>
+          </form>
+          <div id="rx-tags" class="tags"></div>
+          <label class="field-label" data-i18n="regexTester">Test regex against sample title</label>
+          <input type="text" id="rx-test-input" placeholder="e.g. Crypto startup raises $50M" />
+          <div id="rx-test-result" class="muted-note"></div>
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="llmHeading">Plain-language LLM filter (optional)</h2>
+          <label class="check-inline">
+            <input type="checkbox" id="llm-enabled" />
+            <span data-i18n="enableLlm">Enable</span>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <label class="field-label" data-i18n="llmProvider">Provider</label>
+            <select id="llm-provider">
+              <option value="openai_compatible" data-i18n="llmOpenAi">OpenAI-compatible</option>
+              <option value="gemini" data-i18n="llmGemini">Google Gemini</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" data-i18n="llmModel">Model</label>
+            <input type="text" id="llm-model" placeholder="local-model / gpt-4o-mini / gemini-2.5-flash" />
+          </div>
+          <div id="base-url-wrap">
+            <label class="field-label" data-i18n="llmBaseUrl">Base URL</label>
+            <input type="text" id="llm-base-url" placeholder="http://127.0.0.1:1234/v1" />
+          </div>
+          <div>
+            <label class="field-label" data-i18n="llmApiKey">API key</label>
+            <input type="password" id="llm-api-key" placeholder="Optional for LM Studio / Ollama" />
+          </div>
+        </div>
+
+        <label class="field-label" data-i18n="naturalRules">Plain-language rules</label>
+        <textarea id="llm-rules" rows="3" data-i18n-placeholder="naturalPlaceholder"></textarea>
+
+        <div class="actions-row">
+          <button type="button" id="btn-test-llm" class="secondary-btn" data-i18n="testConnection">Test connection</button>
+          <span id="llm-test-status" class="muted-note"></span>
+        </div>
+      </section>
+
+      <section class="card actions-bar">
+        <button type="button" id="btn-export" class="secondary-btn" data-i18n="exportJson">Export JSON</button>
+        <button type="button" id="btn-import" class="secondary-btn" data-i18n="importJson">Import JSON</button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden />
+        <button type="button" id="btn-clear-seen" class="secondary-btn" data-i18n="clearSeen">Clear seen history</button>
+        <button type="button" id="btn-clear-muted" class="secondary-btn" data-i18n="resetMuted">Reset muted posts</button>
+        <span id="save-toast" class="save-toast"></span>
+      </section>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+.feedmute-hidden {
+  display: none !important;
+}
+
+.feedmute-collapsed-bar,
+tr.feedmute-collapsed-row > td {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px dashed rgba(148, 163, 184, 0.45);
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin: 4px 0;
+}
+
+.feedmute-collapsed-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.feedmute-reason-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.feedmute-show-btn {
+  appearance: none;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: transparent;
+  color: inherit;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.feedmute-show-btn:hover {
+  background: rgba(148, 163, 184, 0.16);
+}
+
+.feedmute-trigger-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.feedmute-trigger-btn {
+  appearance: none;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(15, 23, 42, 0.06);
+  color: #64748b;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.feedmute-trigger-btn:hover {
+  border-color: #f97316;
+  color: #ea580c;
+}
+
+.feedmute-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 2147483640;
+  min-width: 210px;
+  background: #141922;
+  color: #e2e8f0;
+  border: 1px solid #2b3545;
+  border-radius: 8px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.feedmute-menu.open {
+  display: flex;
+}
+
+.feedmute-menu-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #e2e8f0;
+  text-align: left;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.feedmute-menu-btn:hover {
+  background: #232c3b;
+}
+
+.feedmute-kw-form {
+  display: flex;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #2b3545;
+}
+
+.feedmute-kw-input {
+  flex: 1;
+  min-width: 0;
+  background: #0d1117;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+.feedmute-kw-submit {
+  appearance: none;
+  border: none;
+  background: #ea580c;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}

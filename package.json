@@ -1,0 +1,19 @@
+{
+  "name": "feedmute",
+  "version": "0.1.0",
+  "description": "Bilingual (EN/UA) mute button for Hacker News, Reddit, X, Google News, and Ukrainian news feeds.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:demo": "vite build",
+    "build:ext": "node scripts/build-extension.mjs",
+    "build": "npm run build:ext && npm run build:demo",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "happy-dom": "^16.8.1",
+    "vite": "^6.0.7",
+    "vitest": "^3.0.5"
+  }
+}

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FeedMute</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="popup">
+      <header class="header">
+        <div class="brand">
+          <img src="icons/icon-48.png" alt="FeedMute" width="22" height="22" />
+          <strong>FeedMute</strong>
+        </div>
+        <div class="header-actions">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" data-lang="en" class="lang-btn">EN</button>
+            <button type="button" data-lang="uk" class="lang-btn">UA</button>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-enabled" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </header>
+
+      <section class="site-banner">
+        <div class="site-left">
+          <span id="site-status">...</span>
+          <button type="button" id="toggle-site-btn" class="link-btn" hidden></button>
+        </div>
+        <span id="muted-badge" class="muted-pill">0 muted</span>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="quickFilters">Built-in filters</h2>
+        <label class="check-row">
+          <input type="checkbox" id="toggle-paywalls" />
+          <span data-i18n="mutePaywalls">Mute paywalled sites</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="toggle-clickbait" />
+          <span data-i18n="muteClickbaitSlop">Mute clickbait & AI slop</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="toggle-seen" />
+          <span data-i18n="hideSeen">Hide already seen posts</span>
+        </label>
+        <div class="mode-row">
+          <span data-i18n="displayMode">When muted</span>
+          <select id="select-display-mode">
+            <option value="collapse" data-i18n="modeCollapse">Collapse to a bar</option>
+            <option value="hide" data-i18n="modeHide">Hide completely</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="keywords">Muted keywords</h2>
+        <form id="keyword-form" class="add-row">
+          <input type="text" id="keyword-input" data-i18n-placeholder="keywordPlaceholder" />
+          <button type="submit" data-i18n="add">Add</button>
+        </form>
+        <div id="keyword-tags" class="tags"></div>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="domains">Muted domains</h2>
+        <form id="domain-form" class="add-row">
+          <input type="text" id="domain-input" data-i18n-placeholder="domainPlaceholder" />
+          <button type="submit" data-i18n="add">Add</button>
+        </form>
+        <div id="domain-tags" class="tags"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 data-i18n="naturalRules">Plain-language rules (LLM)</h2>
+          <label class="check-inline">
+            <input type="checkbox" id="toggle-llm" />
+            <span data-i18n="enableLlm">Enable</span>
+          </label>
+        </div>
+        <textarea id="llm-prompt" rows="2" data-i18n-placeholder="naturalPlaceholder"></textarea>
+        <div class="presets">
+          <button type="button" class="chip" data-preset="ai" data-i18n="presetAi">No AI hype</button>
+          <button type="button" class="chip" data-preset="ads" data-i18n="presetAds">No promo / ads</button>
+          <button type="button" class="chip" data-preset="politics" data-i18n="presetPolitics">No politics</button>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <button type="button" id="btn-options" data-i18n="openOptions">Full settings</button>
+        <button type="button" id="btn-export" data-i18n="exportJson">Export JSON</button>
+        <button type="button" id="btn-reset-muted" data-i18n="resetMuted">Reset muted posts</button>
+      </footer>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
